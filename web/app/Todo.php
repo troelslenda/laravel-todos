@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 
 class Todo extends Model

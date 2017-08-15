@@ -32,6 +32,11 @@
                     <div class="panel-heading">Create new Todo</div>
 
                     <div class="panel-body">
+                        @if($errors->first('name'))
+                            <div class="alert alert-danger">
+                                <?php echo $errors->first('name'); ?>
+                            </div>
+                        @endif
                         <form action="/todo" method="POST" class="form-horizontal">
                             {{ csrf_field() }}
 

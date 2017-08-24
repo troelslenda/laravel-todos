@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Todo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TodoController extends Controller
@@ -51,9 +52,14 @@ class TodoController extends Controller
         if ($validator->fails()) {
             $redirect = redirect()->back()->withErrors($validator->errors());
         } else {
-            $todo = Todo::create(['name' => $request->get('name')]);
-            // Relate todos to loggedin user.
-            Auth::user()->todos()->save($todo);
+            try {
+                $todo = Todo::create(['name' => $request->get('name')]);
+                // Relate todos to loggedin user.
+                Auth::user()->todos()->save($todo);
+            } catch (\Exception $e) {
+                Log::info("Exception caught: {$e->getMessage()} {$e->getFile()}:{$e->getLine()}");
+            }
+
             $redirect = redirect('/');
         }
         return $redirect;
@@ -67,7 +73,7 @@ class TodoController extends Controller
      */
     public function toggleComplete($id)
     {
-        $todo = Auth::user()->todos()->where('id', $id)->first();
+        $todo = Auth::user()->todos()->find($id);
         $todo->setAttribute('completed', !$todo->getAttribute('completed'));
         $todo->save();
         return redirect('/');
@@ -80,7 +86,7 @@ class TodoController extends Controller
      */
     public function deleteCompleted()
     {
-        Auth::user()->todos()->where('completed', true)->delete();
+        Auth::user()->todos()->whereCompleted(true)->delete();
         return redirect('/');
     }
 }

@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 
 class Todo extends Model
 {
@@ -20,12 +19,15 @@ class Todo extends Model
      * Save model.
      *
      * @param array $options
+     *
+     * @throws \Exception
+     *
      * @return bool
      */
     public function save(array $options = [])
     {
         if (empty(self::getAttribute('name'))) {
-            throw new MissingMandatoryParametersException('Todo needs name before saving!');
+            throw new \Exception('Todo needs name before saving!');
         }
         return parent::save($options);
     }

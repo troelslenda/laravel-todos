@@ -21,7 +21,7 @@ class TodoController extends Controller
         $active = [];
         $completed = [];
 
-        $todos = Auth::user()->todos()->orderBy('updated_at','desc')->get();
+        $todos = Auth::user()->todos()->orderBy('updated_at', 'desc')->get();
         /** @var Collection $groups */
         // Split the collection of todos into active and completed.
         // @todo if possible with Laravel templating use a filter on output loops instead.
@@ -45,8 +45,9 @@ class TodoController extends Controller
     public function create(Request $request)
     {
         // The todos must have a name and at least 3 characters to make sense.
-        $validator = Validator::make($request->all(),
-          ['name' => 'required|min:3']
+        $validator = Validator::make(
+            $request->all(),
+            ['name' => 'required|min:3']
         );
 
         if ($validator->fails()) {

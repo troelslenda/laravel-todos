@@ -29,7 +29,8 @@ class User extends Authenticatable
     /**
      * Set up relationship to Todos.
      */
-    public function todos(){
+    public function todos()
+    {
         return $this->hasMany('App\Todo', 'owner', 'id');
     }
 }
